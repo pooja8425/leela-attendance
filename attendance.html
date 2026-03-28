@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leela's Academy Attendance</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+<body style="text-align:center;font-family:Arial;">
+
+<h2>Leela's Academy Attendance</h2>
+
+<div id="reader" style="width:300px;margin:auto;"></div>
+
+<div id="resultBox" style="
+  display:none;
+  margin-top:20px;
+  padding:20px;
+  font-size:22px;
+  font-weight:bold;
+  border-radius:10px;">
+</div>
+
+<audio id="successSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const scriptURL = "PASTE_YOUR_WEB_APP_URL_HERE";
+
+function onScanSuccess(decodedText) {
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: "studentId=" + decodedText
+  })
+  .then(response => response.text())
+  .then(data => {
+
+    let box = document.getElementById("resultBox");
+    box.style.display = "block";
+
+    if(data.includes("IN")) {
+      box.style.backgroundColor = "#28a745";
+      box.style.color = "white";
+      box.innerHTML = "✅ ENTRY MARKED";
+    }
+    else if(data.includes("OUT")) {
+      box.style.backgroundColor = "#007bff";
+      box.style.color = "white";
+      box.innerHTML = "👋 EXIT MARKED";
+    }
+    else {
+      box.style.backgroundColor = "red";
+      box.style.color = "white";
+      box.innerHTML = data;
+    }
+
+    document.getElementById("successSound").play();
+
+    setTimeout(() => {
+      box.style.display = "none";
+    }, 3000);
+
+  });
+}
+
+new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 })
+  .render(onScanSuccess);
+</script>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+
+</body>
+</html>
