@@ -4,7 +4,6 @@
   <title>Leela's Academy Attendance</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
-<body>
 
 <body style="text-align:center;font-family:Arial;">
 
@@ -26,12 +25,16 @@
 </audio>
 
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyU2gAgfXkCl4SM_IeS6m8kPL34j8XBgKHtdriO4rpz-Wig2PV0NGkoT9JGUrgoEf7R/exec";
+
+const scriptURL = "PASTE_YOUR_GOOGLE_WEB_APP_URL_HERE";
 
 function onScanSuccess(decodedText) {
 
   fetch(scriptURL, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
     body: "studentId=" + decodedText
   })
   .then(response => response.text())
@@ -67,10 +70,8 @@ function onScanSuccess(decodedText) {
 
 new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 })
   .render(onScanSuccess);
+
 </script>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-
 
 </body>
 </html>
